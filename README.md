@@ -131,3 +131,35 @@ To test the metrics use:
 curl http://<host>:8080/api/cart/metrics
 curl http://<host>:8080/api/payment/metrics
 ```
+
+## AKS Deployment Steps
+
+1. Provision an Azure Kubernetes Service (AKS) cluster.
+2. Create a Dockerfile for every microservice and database component.
+3. Build the container images and push them to your container registry.
+4. Create Kubernetes YAML manifests for every microservice and database component.
+5. Create a Helm chart for the application.
+6. Configure `kubectl` to connect to the AKS cluster.
+7. Verify that `kubectl` is connected to the intended cluster:
+
+   ```shell
+   kubectl config current-context
+   ```
+
+8. Navigate to the Helm chart directory under `AKS`, create the application namespace, and install the chart:
+
+   ```shell
+   kubectl create ns robot-shop
+   helm install robot-shop --namespace robot-shop
+   ```
+
+9. In the Redis StatefulSet manifest, configure the persistent-volume access mode, storage class, and volume mode.
+10. Enable the ingress controller add-on for the AKS cluster.
+11. Create an ingress manifest, then apply it and confirm that the ingress resource was created:
+
+    ```shell
+    kubectl apply -f <ingress>.yaml
+    kubectl get ing -n robot-shop
+    ```
+
+12. Open the application using the ingress IP address or hostname.
